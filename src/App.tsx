@@ -11,7 +11,7 @@ const App = (): JSX.Element => {
   const [blobList, setBlobList] = useState<string[]>([]);
 
   // current file to upload into container
-  const [fileSelected, setFileSelected] = useState(null);
+  var [fileSelected, setFileSelected] = useState(null);
 
   // UI/form management
   const [uploading, setUploading] = useState(false);
@@ -27,7 +27,8 @@ const App = (): JSX.Element => {
     setUploading(true);
 
     // *** UPLOAD TO AZURE STORAGE ***
-    const blobsInContainer: string[] = await uploadFileToBlob(fileSelected);
+    //davor noch rename, nach der ID, ist dann einfacher für die Function
+    const blobsInContainer: string[] = await uploadFileToBlob(fileSelected, String(urlParams.get('id')));
 
     // prepare UI for results
     setBlobList(blobsInContainer);
@@ -37,6 +38,8 @@ const App = (): JSX.Element => {
     setUploading(false);
     setInputKey(Math.random().toString(36));
   };
+
+  const urlParams = new URLSearchParams(window.location.search);
 
   // display form
   const DisplayForm = () => (
@@ -70,7 +73,8 @@ const App = (): JSX.Element => {
 
   return (
     <div>
-      <h1>Upload file to Azure Blob Storage</h1>
+      <h1>Upload file to Azure Blob Storage UniKult Test</h1>
+      <h2>ID: {urlParams.get('id')}</h2>
       {storageConfigured && !uploading && DisplayForm()}
       {storageConfigured && uploading && <div>Uploading</div>}
       <hr />
